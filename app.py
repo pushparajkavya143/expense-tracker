@@ -32,7 +32,7 @@ def index():
 
 @app.route('/dashboard')
 def dashboard():
-    transactions_list = Transaction.query.filter_by(user_id=current_user.id).all()
+    transactions_list = Transaction.query.all()
     print(f"DEBUG: Data found - {transactions_list}")
     return render_template("dashboard.html", transactions=transactions_list)
 
