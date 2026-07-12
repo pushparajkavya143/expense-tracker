@@ -27,6 +27,7 @@
                 </tr>
             </thead>
             <tbody>
+                <p>Total transactions in DB: {{ transactions|length }}</p>
     {% for transaction in transactions %}
     <tr>
         <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.date }}</td>
