@@ -58,7 +58,7 @@ def register():
             return render_template('register.html')
 
         # Simple direct password text standard to avoid hash mismatch issues
-        new_user = User(username=username, email=email, password=password)
+        new_user = User(username=username, email=email, password_hash=password)
         db.session.add(new_user)
         db.session.commit()
         return redirect(url_for('login'))
@@ -76,7 +76,7 @@ def login():
         # Username அல்லது Email ரெண்டுல எதை வச்சு லாகின் பண்ணினாலும் ஒர்க் ஆகும்
         user = User.query.filter((User.username == username_or_email) | (User.email == username_or_email)).first()
         
-        if user and user.password == password:
+        if user and user.password_hash == password:
             login_user(user)
             return redirect(url_for('dashboard'))
         else:
