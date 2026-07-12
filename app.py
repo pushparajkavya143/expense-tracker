@@ -113,44 +113,73 @@ def logout():
 
 # --- Dashboard ---
 
-@app.route("/dashboard")
+@app.route('/dashboard')
 @login_required
 def dashboard():
-    today = date.today()
-    month = int(request.args.get("month", today.month))
-    year = int(request.args.get("year", today.year))
+    # User ஆட் பண்ணின எல்லா டிரான்ஸாக்ஷனையும் டேட்டாபேஸ்ல இருந்து எடுக்குது
+    transactions = Transaction.query.filter_by(user_id=current_user.id).order_by(Transaction.date.desc()).all()
+    
+    # HTML கோடை பேக்எண்ட்ல இருந்தே ஸ்ட்ரைட்டா இன்ஜெக்ட் பண்றோம் (டேபிளோட வரும்)
+    html_content = """
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dashboard</title>
+        <link rel="stylesheet" href="/static/style.css">
+    </head>
+    <body>
+        <div class="dashboard-container" style="max-width: 800px; margin: 40px auto; padding: 20px; font-family: sans-serif; background: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-radius: 8px;">
+            <h2 style="text-align: center; color: #2c3e50;">Welcome to Expense Tracker Dashboard</h2>
+            
+            <div class="actions" style="display: flex; justify-content: space-between; margin: 20px 0;">
+                <a href="/add" class="btn" style="background-color: #3498db; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Add New Transaction</a>
+                <a href="/logout" class="btn btn-danger" style="background-color: #e74c3c; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Logout</a>
+            </div>
 
-    txns = (
-        Transaction.query.filter_by(user_id=current_user.id)
-        .filter(extract("month", Transaction.date) == month)
-        .filter(extract("year", Transaction.date) == year)
-        .order_by(Transaction.date.desc())
-        .all()
-    )
-
-    total_income = sum(t.amount for t in txns if t.type == "income")
-    total_expense = sum(t.amount for t in txns if t.type == "expense")
-    balance = total_income - total_expense
-
-    recent = (
-        Transaction.query.filter_by(user_id=current_user.id)
-        .order_by(Transaction.date.desc(), Transaction.id.desc())
-        .limit(8)
-        .all()
-    )
-
-    return render_template(
-        "dashboard.html",
-        month=month,
-        year=year,
-        month_name=calendar.month_name[month],
-        total_income=total_income,
-        total_expense=total_expense,
-        balance=balance,
-        recent=recent,
-        txn_count=len(txns),
-    )
-
+            <h3 style="color: #34495e; margin-top: 30px;">Your Transactions</h3>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 15px; text-align: left;">
+                <thead>
+                    <tr style="background-color: #2c3e50; color: white;">
+                        <th style="padding: 12px; border: 1px solid #ddd;">Description</th>
+                        <th style="padding: 12px; border: 1px solid #ddd;">Category</th>
+                        <th style="padding: 12px; border: 1px solid #ddd;">Amount</th>
+                        <th style="padding: 12px; border: 1px solid #ddd;">Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+    """
+    
+    if not transactions:
+        html_content += """
+                    <tr>
+                        <td colspan="4" style="padding: 20px; text-align: center; color: #777; font-style: italic;">No transactions found. Add one above!</td>
+                    </tr>
+        """
+    else:
+        for t in transactions:
+            row_bg = "#e8f8f5" if t.type == "income" else "#fdedec"
+            type_color = "#27ae60" if t.type == "income" else "#c0392b"
+            html_content += f"""
+                    <tr style="background-color: {row_bg}; border-bottom: 1px solid #ddd;">
+                        <td style="padding: 12px;">{t.description}</td>
+                        <td style="padding: 12px;">{t.category}</td>
+                        <td style="padding: 12px; font-weight: bold;">₹{t.amount}</td>
+                        <td style="padding: 12px; font-weight: bold; color: {type_color};">{t.type.upper()}</td>
+                    </tr>
+            """
+            
+    html_content += """
+                </tbody>
+            </table>
+        </div>
+    </body>
+    </html>
+    """
+    
+    from flask import render_template_string
+    return render_template_string(html_content)
 
 # --- Add / Edit / Delete transactions ---
 
