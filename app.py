@@ -52,7 +52,9 @@ def add_transaction():
             db.session.add(new_trans)
             db.session.commit()
             return redirect(url_for('dashboard'))
-        except Exception:
+        except Exception as e:
+            print(f"Error details: {e}")
+            return f"Error: {e}"
             return redirect(url_for('dashboard'))
             
     return render_template(
