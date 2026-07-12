@@ -33,7 +33,7 @@ def index():
 @app.route('/dashboard')
 def dashboard():
     transactions = Transaction.query.all()
-    print(f"Transactions found: {len(transactions)}")
+    print(f"DEBUG: Transactions count: {len(transactions)}")
     return render_template("dashboard.html", transactions=transactions)
 
 # --- Transaction சேர்ப்பதற்கான ரூட் ---
