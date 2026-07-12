@@ -193,7 +193,28 @@ def add_transaction():
             return redirect(url_for("dashboard"))
         except (ValueError, KeyError) as e:
             flash(f"Error: {e}", "danger")
+@app.route('/transaction/add', methods=['GET', 'POST'])
+@login_required
+def add_transaction():
+    if request.method == 'POST':
+        description = request.form.get('description')
+        category = request.form.get('category')
+        amount = request.form.get('amount')
+        t_type = request.form.get('type')
+        
+        new_trans = Transaction(description=description, category=category, 
+                                amount=float(amount), type=t_type, user_id=current_user.id)
+        db.session.add(new_trans)
+        db.session.commit()
+        return redirect(url_for('dashboard'))
 
+    return render_template(
+        "add_edit_transaction.html",
+        txn=None,
+        today=date.today().isoformat(),
+        income_categories=Transaction.INCOME_CATEGORIES,
+        expense_categories=Transaction.EXPENSE_CATEGORIES
+    )
     return render_template(
         "add_edit_transaction.html",
         txn=None,
