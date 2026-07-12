@@ -17,14 +17,14 @@ def load_user(user_id):
 
 # --- மெயின் ரூட் (Dashboard) ---
 @app.route('/')
-@login_required
+#@login_required
 def index():
     return redirect(url_for('dashboard'))
 
 @app.route('/dashboard')
 
 def dashboard():
-    transactions = Transaction.query.filter_by(user_id=current_user.id=1).all()
+    transactions = Transaction.query.filter_by(user_id=1).all()
     return render_template("dashboard.html", transactions=transactions)
 
 # --- Transaction சேர்ப்பதற்கான ரூட் ---
@@ -40,7 +40,7 @@ def add_transaction():
             t_date = datetime.strptime(request.form.get("date"), "%Y-%m-%d").date()
             
             new_trans = Transaction(
-                user_id=current_user.id, 
+                user_id=1 
                 type=t_type, 
                 category=category, 
                 amount=amount, 
