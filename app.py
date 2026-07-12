@@ -66,7 +66,8 @@ def add_transaction():
 # --- Login & Logout (இது ரொம்ப முக்கியம்) ---
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    # லாகின் லாஜிக் இங்கே வரும்
+    if request.method == 'POST':
+        return redirect(url_for('dashboard'))
     return render_template("login.html")
 
 if __name__ == '__main__':
