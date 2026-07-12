@@ -22,14 +22,14 @@ def index():
     return redirect(url_for('dashboard'))
 
 @app.route('/dashboard')
-@login_required
+#@login_required
 def dashboard():
     transactions = Transaction.query.filter_by(user_id=current_user.id).all()
     return render_template("dashboard.html", transactions=transactions)
 
 # --- Transaction சேர்ப்பதற்கான ரூட் ---
 @app.route('/transaction/add', methods=['GET', 'POST'])
-@login_required
+#@login_required
 def add_transaction():
     if request.method == 'POST':
         try:
