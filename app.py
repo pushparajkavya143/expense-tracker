@@ -114,7 +114,7 @@ def dashboard():
             <h2 style="text-align: center; color: #2c3e50;">Welcome to Expense Tracker Dashboard</h2>
             
             <div class="actions" style="display: flex; justify-content: space-between; margin: 20px 0;">
-                <a href="/add" class="btn" style="background-color: #3498db; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Add New Transaction</a>
+                <a href="/transaction/add" class="btn" style="background-color: #3498db; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Add New Transaction</a>
                 <a href="/logout" class="btn btn-danger" style="background-color: #e74c3c; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Logout</a>
             </div>
 
