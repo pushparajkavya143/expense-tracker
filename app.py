@@ -37,7 +37,6 @@ def dashboard():
     return render_template("dashboard.html", transactions=transactions_list)
 
 @app.route('/transaction/add', methods=['GET', 'POST'])
-#@login_required
 def add_transaction():
     if request.method == 'POST':
         try:
@@ -53,7 +52,7 @@ def add_transaction():
             amount = float(request.form.get("amount"))
             description = request.form.get("description", "").strip()
             date_str = request.form.get("date")
-            t_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+            t_date = datetime.strptime(date_str, "%d-%m-%Y").date()
 
             new_trans = Transaction(user_id=user_id, type=t_type, category=category, amount=amount, description=description, date=t_date)
             db.session.add(new_trans)
