@@ -163,9 +163,9 @@ def dashboard():
 
 # --- Add / Edit / Delete transactions ---
 
-@app.route("/transaction/add", methods=["GET", "POST"])
+@app.route("/transaction/add", methods=['GET', 'POST'])
 @login_required
-def add_transaction():
+def add_new_transaction():
     if request.method == "POST":
         try:
             t_type = request.form["type"]
