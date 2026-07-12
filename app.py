@@ -33,8 +33,7 @@ def index():
 @app.route('/dashboard')
 def dashboard():
     transactions = Transaction.query.all()
-    print(f"DEBUG: Transactions count: {len(transactions)}")
-    return render_template("dashboard.html", transactions=transactions)
+    return f"Debug: Transactions count is {len(transactions)}. <br> Data: {transactions}"
 
 
 @app.route('/transaction/add', methods=['GET', 'POST'])
