@@ -4,15 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Expense Tracker</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
-    <div class="dashboard-container">
-        <h2>Welcome to Expense Tracker Dashboard</h2>
-        <div class="actions">
-            <a href="{{ url_for('add_transaction') }}" class="btn">Add New Transaction</a>
-            <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
-        </div>
+<body style="background-color: #f4f6f9; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; padding: 20px;">
+
+<div class="dashboard-container" style="background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 800px; color: black; font-family: sans-serif;">
+    <h2 style="text-align: center; margin-bottom: 25px;">Welcome to Expense Tracker Dashboard</h2>
+    
+    <div class="actions" style="display: flex; justify-content: space-between; margin-bottom: 30px;">
+        <a href="{{ url_for('add_transaction') }}" class="btn" style="background-color: #3498db; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; font-weight: bold;">Add New Transaction</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger" style="background-color: #e74c3c; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; font-weight: bold;">Logout</a>
     </div>
+
+    <h3 style="margin-bottom: 15px; border-bottom: 2px solid #3498db; padding-bottom: 5px;">Your Transactions</h3>
+    
+    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+        <thead>
+            <tr style="background-color: #2c3e50; color: white;">
+                <th style="padding: 12px; border: 1px solid #ddd;">Date</th>
+                <th style="padding: 12px; border: 1px solid #ddd;">Description</th>
+                <th style="padding: 12px; border: 1px solid #ddd;">Category</th>
+                <th style="padding: 12px; border: 1px solid #ddd;">Amount</th>
+                <th style="padding: 12px; border: 1px solid #ddd;">Type</th>
+            </tr>
+        </thead>
+        <tbody style="background-color: white; color: black;">
+            {% if txns %}
+                {% for transaction in txns %}
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.date.strftime('%Y-%m-%d') if transaction.date else '' }}</td>
+                    <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.description }}</td>
+                    <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.category }}</td>
+                    <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.amount }}</td>
+                    <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.type }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="5" style="padding: 20px; text-align: center; color: #666;">No transactions found for this month. Add one above!</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+
 </body>
 </html>
