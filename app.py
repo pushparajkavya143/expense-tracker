@@ -42,6 +42,7 @@ def dashboard():
 def add_transaction():
     if request.method == 'POST':
         try:
+            print("Form data:", request.form)
             t_type = request.form.get("type")
             category = request.form.get("category")
             amount = float(request.form.get("amount"))
@@ -51,10 +52,11 @@ def add_transaction():
             new_trans = Transaction(user_id=1, type=t_type, category=category, amount=amount, description=description, date=t_date)
             db.session.add(new_trans)
             db.session.commit()
+            print("Transaction saved successfully!")
             return redirect(url_for('dashboard'))
         except Exception as e:
             print(f"Error details: {e}")
-            return f"Error: {e}"
+            return f"Error occurred: {e}"
             return redirect(url_for('dashboard'))
             
     return render_template(
