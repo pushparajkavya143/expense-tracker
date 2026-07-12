@@ -32,9 +32,9 @@ def index():
 
 @app.route('/dashboard')
 def dashboard():
-    all_transactions = Transaction.query.all()
-    print(f"DEBUG: Data found - {all_transactions}")
-    return render_template("dashboard.html", transactions=transactions)
+    transactions_list = Transaction.query.all()
+    print(f"DEBUG: Data found - {transactions_list}")
+    return render_template("dashboard.html", transactions=transactions_list)
 
 @app.route('/transaction/add', methods=['GET', 'POST'])
 #@login_required
