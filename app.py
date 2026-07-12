@@ -45,15 +45,15 @@ def add_transaction():
             print("Received form data:", request.form)
             t_type = request.form.get("type")
             category = request.form.get("category")
-            amount_str = request.form.get("amount")
-            amount = float(amount_str)
+            amount = float(request.form.get("amount"))
             description = request.form.get("description", "").strip()
-            data_str = request.form.get("date")
+            date_str = request.form.get("date")
             t_date = datetime.strptime(date_str,"%Y-%m-%d").date()
             
             new_trans = Transaction(user_id=1, type=t_type, category=category, amount=amount, description=description, date=t_date)
             db.session.add(new_trans)
             db.session.commit()
+            print("Transaction saved successfully!")
             return redirect(url_for('dashboard'))
         except Exception as e:
             return f"Error occurred: {e}. Data received: {request.form}"
