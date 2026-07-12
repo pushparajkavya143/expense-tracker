@@ -28,10 +28,12 @@
             </tr>
         </thead>
         <tbody style="background-color: white; color: black;">
-            {% if txns %}
-                {% for transaction in txns %}
+            {% set display_txns = txns if txns is defined else (transactions_list if transactions_list is defined else transactions) %}
+            
+            {% if display_txns %}
+                {% for transaction in display_txns %}
                 <tr style="border-bottom: 1px solid #ddd;">
-                    <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.date.strftime('%Y-%m-%d') if transaction.date else '' }}</td>
+                    <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.date }}</td>
                     <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.description }}</td>
                     <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.category }}</td>
                     <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.amount }}</td>
@@ -40,7 +42,7 @@
                 {% endfor %}
             {% else %}
                 <tr>
-                    <td colspan="5" style="padding: 20px; text-align: center; color: #666;">No transactions found for this month. Add one above!</td>
+                    <td colspan="5" style="padding: 20px; text-align: center; color: #666;">No transactions found. Add one above!</td>
                 </tr>
             {% endif %}
         </tbody>
