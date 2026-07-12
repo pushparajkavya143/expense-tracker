@@ -39,15 +39,7 @@ def add_transaction():
             description = request.form.get("description", "").strip()
             t_date = datetime.strptime(request.form.get("date"), "%Y-%m-%d").date()
             
-            new_trans = Transaction(
-                user_id=1 
-                type=t_type, 
-                category=category, 
-                amount=amount, 
-                description=description, 
-                date=t_date
-            )
-            
+            new_trans = Transaction(user_id=1, type=t_type, category=category, amount=amount, description=description, date=t_date)
             db.session.add(new_trans)
             db.session.commit()
             return redirect(url_for('dashboard'))
