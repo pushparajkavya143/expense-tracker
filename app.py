@@ -43,6 +43,11 @@ def add_transaction():
         try:
             print("Received form data:", request.form)
             
+            if hasattr(current_user, 'id'):
+                user_id = current_user.id
+            else:
+                user_id = 1
+            
             t_type = request.form.get("type")
             category = request.form.get("category")
             amount = float(request.form.get("amount"))
@@ -50,7 +55,7 @@ def add_transaction():
             date_str = request.form.get("date")
             t_date = datetime.strptime(date_str, "%Y-%m-%d").date()
 
-            new_trans = Transaction(user_id=current_user.id, type=t_type, category=category, amount=amount, description=description, date=t_date)
+            new_trans = Transaction(user_id=user_id, type=t_type, category=category, amount=amount, description=description, date=t_date)
             db.session.add(new_trans)
             db.session.commit()
             print("Transaction Saved Successfully")
