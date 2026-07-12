@@ -186,24 +186,36 @@ def add_new_transaction():
                 amount=amount,
                 description=description,
                 date=t_date,
-            )
-            db.session.add(txn)
-            db.session.commit()
-            flash("Transaction added.", "success")
-            return redirect(url_for("dashboard"))
-        except (ValueError, KeyError) as e:
-            flash(f"Error: {e}", "danger")
-@app.route('/transaction/add', methods=['GET', 'POST'])
+ @app.route('/transaction/add', methods=['GET', 'POST'])
 @login_required
 def add_transaction():
     if request.method == 'POST':
-        description = request.form.get('description')
-        category = request.form.get('category')
-        amount = request.form.get('amount')
-        t_type = request.form.get('type')
-        
-        new_trans = Transaction(description=description, category=category, 
-                                amount=float(amount), type=t_type, user_id=current_user.id)
+        try:
+            t_type = request.form.get("type")
+            category = request.form.get("category")
+            amount = float(request.form.get("amount"))
+            description = request.form.get("description","").strip()
+            t_date = datetime.strptime(request.form.get("date"),"%Y-%m-%d").date()
+
+            new_trans = Transaction(user_id=current_user.id,type=t_type, category=category, amount=amount, description=description, date=t_date)
+            
+            db.session.add(new_trans)
+            db.session.commit()
+            flash("Transaction added.", "success")
+            return redirect(url_for('dashboard'))
+        except Exception as e:
+            flash(f"Error: {e}", "danger")
+            return redirect(url_for('dashboard'))
+    
+    
+    return render_template(
+        "add_edit_transaction.html",
+        txn=None,
+        today=date.today().isoformat(),
+        income_categories=Transaction.INCOME_CATEGORIES,
+        expense_categories=Transaction.EXPENSE_CATEGORIES
+    )
+                    amount=float(amount), type=t_type, user_id=current_user.id)
         db.session.add(new_trans)
         db.session.commit()
         return redirect(url_for('dashboard'))
