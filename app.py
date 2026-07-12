@@ -31,9 +31,9 @@ def index():
     return redirect(url_for('dashboard'))
 
 @app.route('/dashboard')
-
 def dashboard():
     transactions = Transaction.query.filter_by(user_id=1).all()
+    print(f"Transactions found: {len(transactions)}")
     return render_template("dashboard.html", transactions=transactions)
 
 # --- Transaction சேர்ப்பதற்கான ரூட் ---
