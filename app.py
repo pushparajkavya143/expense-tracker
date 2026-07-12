@@ -50,12 +50,12 @@ def add_transaction():
             date_str = request.form.get("date")
             t_date = datetime.strptime(date_str, "%Y-%m-%d").date()
 
-            new_trans = Transaction(user_id=1, type=t_type, category=category, amount=amount, description=description, date=t_date)
+            new_trans = Transaction(user_id=current_user.id, type=t_type, category=category, amount=amount, description=description, date=t_date)
             db.session.add(new_trans)
             db.session.commit()
             
             # டேட்டா சேவ் ஆனா இங்க வரும்
-            return "Transaction saved successfully! <a href='/dashboard'>Go to Dashboard</a>"
+            return redirect(url_for("dashboard"))
             
         except Exception as e:
             # எரர் வந்தா அந்த எரர் என்னனு ஸ்க்ரீன்ல காட்டும்
