@@ -62,6 +62,7 @@ def add_transaction():
         expense_categories=Transaction.EXPENSE_CATEGORIES
     )
 
+
 # --- Login & Logout (இது ரொம்ப முக்கியம்) ---
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -72,36 +73,7 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     app.run(debug=True)
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Expense Tracker</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <div class="login-container">
-        <h2>Create an Account</h2>
-        <form method="POST" action="">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit" class="btn">Register</button>
-        </form>
-        <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
-    </div>
-</body>
-</html>
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
