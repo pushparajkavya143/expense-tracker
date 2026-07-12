@@ -28,19 +28,22 @@
             </thead>
             <tbody>
                 <p>Total transactions in DB: {{ transactions|length }}</p>
+<tbody style="background-color: white;">
+    {% if transactions %}
     {% for transaction in transactions %}
-    <tr>
+    <tr style="border-bottom: 1px solid #ddd;">
         <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.date }}</td>
         <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.description }}</td>
         <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.category }}</td>
         <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.amount }}</td>
-        <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.typr }}</td>
+        <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.type }}</td>
     </tr>
     {% endfor %}
-</tbody>
-               {% else %}
-                <tr>
-                    <td colspan="5" style="padding: 20px; text-align: center;"> No transactions found. Add one above!</td>td>
+ {% else %}
+         <tr>
+                    <td colspan="5" style="padding: 20px; text-align: center; color:#666;">
+                        No transactions found. Add one above!
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
