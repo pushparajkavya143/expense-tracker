@@ -53,6 +53,7 @@ def add_transaction():
             new_trans = Transaction(user_id=current_user.id, type=t_type, category=category, amount=amount, description=description, date=t_date)
             db.session.add(new_trans)
             db.session.commit()
+            print("Transaction Saved Successfully")
             
             # டேட்டா சேவ் ஆனா இங்க வரும்
             return redirect(url_for("dashboard"))
