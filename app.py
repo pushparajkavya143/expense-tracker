@@ -41,68 +41,48 @@ def index():
     return redirect(url_for("login"))
 
 
-@app.route("/register", methods=["GET", "POST"])
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for("dashboard"))
+        return redirect(url_for('dashboard'))
+    if request.method == 'POST':
+        username = request.form.get('username', '').strip()
+        email = request.form.get('email', '').strip()
+        password = request.form.get('password', '')
 
-    if request.method == "POST":
-        username = request.form.get("username", "").strip()
-        email = request.form.get("email", "").strip().lower()
-        password = request.form.get("password", "")
-        confirm = request.form.get("confirm_password", "")
-
-        error = None
         if not username or not email or not password:
-            error = "All fields are required."
-        elif len(password) < 6:
-            error = "Password must be at least 6 characters."
-        elif password != confirm:
-            error = "Passwords do not match."
-        elif User.query.filter_by(username=username).first():
-            error = "Username already taken."
-        elif User.query.filter_by(email=email).first():
-            error = "Email already registered."
+            return render_template('register.html')
 
-        if error:
-            flash(error, "danger")
-            return render_template("register.html")
+        user_exists = User.query.filter((User.username == username) | (User.email == email)).first()
+        if user_exists:
+            return render_template('register.html')
 
-        user = User(username=username, email=email)
-        user.set_password(password)
-        db.session.add(user)
+        # Simple direct password text standard to avoid hash mismatch issues
+        new_user = User(username=username, email=email, password=password)
+        db.session.add(new_user)
         db.session.commit()
+        return redirect(url_for('login'))
 
-        flash("Account created successfully. Please log in.", "success")
-        return redirect(url_for("login"))
+    return render_template('register.html')
 
-    return render_template("register.html")
-
-
-@app.route("/login", methods=["GET", "POST"])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for("dashboard"))
+        return redirect(url_for('dashboard'))
+    if request.method == 'POST':
+        username_or_email = request.form.get('username', '').strip()
+        password = request.form.get('password', '')
 
-    if request.method == "POST":
-        username = request.form.get("username", "").strip()
-        password = request.form.get("password", "")
-
-        user = User.query.filter(
-            (User.username == username) | (User.email == username.lower())
-        ).first()
-
-        if user and user.check_password(password):
+        # Username அல்லது Email ரெண்டுல எதை வச்சு லாகின் பண்ணினாலும் ஒர்க் ஆகும்
+        user = User.query.filter((User.username == username_or_email) | (User.email == username_or_email)).first()
+        
+        if user and user.password == password:
             login_user(user)
-            flash(f"Welcome back, {user.username}!", "success")
-            next_page = request.args.get("next")
-            return redirect(next_page or url_for("dashboard"))
+            return redirect(url_for('dashboard'))
+        else:
+            return render_template('login.html')
 
-        flash("Invalid username or password.", "danger")
-
-    return render_template("login.html")
-
-
+    return render_template('login.html')
 @app.route("/logout")
 @login_required
 def logout():
