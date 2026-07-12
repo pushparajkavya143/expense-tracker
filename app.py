@@ -57,7 +57,7 @@ def add_transaction():
         except Exception as e:
             print(f"Error details: {e}")
             return f"Error occurred: {e}"
-            return redirect(url_for('dashboard'))
+            #return redirect(url_for('dashboard'))
             
     return render_template(
         "add_edit_transaction.html",
