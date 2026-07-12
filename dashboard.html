@@ -27,15 +27,16 @@
                 </tr>
             </thead>
             <tbody>
-                {% for transaction in transactions %}
-                <tr style="background-color: {% if transaction.type == 'income' %}#e8f8f5{% else %}#fdedec{% endif %}; border-bottom: 1px solid #ddd;">
-                    <td style="padding: 12px;">{{ transaction.date.strftime('%Y-%m-%d') if transaction.date else '' }}</td>
-                    <td style="padding: 12px;">{{ transaction.description }}</td>
-                    <td style="padding: 12px;">{{ transaction.category }}</td>
-                    <td style="padding: 12px; font-weight: bold;">₹{{ transaction.amount }}</td>
-                    <td style="padding: 12px; font-weight: bold; color: {% if transaction.type == 'income' %}#27ae60{% else %}#c0392b{% endif %};">{{ transaction.type | upper }}</td>
-                </tr>
-                {% else %}
+    {% for transaction in transactions %}
+    <tr>
+        <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.date }}</td>
+        <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.description }}</td>
+        <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.category }}</td>
+        <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.amount }}</td>
+        <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.type }}</td>
+    </tr>
+    {% endfor %}
+</tbody>
                 <tr>
                     <td colspan="5" style="padding: 20px; text-align: center; color: #777; font-style: italic;">No transactions found. Add one above!</td>
                 </tr>
