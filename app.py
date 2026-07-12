@@ -1,11 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from datetime import date, datetime
-from models import db, User, Transaction # உங்க மாடல்ஸ் ஃபைல் நேம் கரெக்டா இருக்கானு பாத்துக்கோங்க
+from models import db, User, Transaction 
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///expense_tracker.db'
-app.config['SECRET_KEY'] = 'your_secret_key' # இதை உங்க கோடுல என்ன வச்சிருந்தீங்களோ அதை போடுங்க
+app.config['SECRET_KEY'] = 'my_password_130706'
 
 db.init_app(app)
 login_manager = LoginManager(app)
@@ -15,8 +15,19 @@ login_manager.login_view = 'login'
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# --- மற்ற ரவுட்ஸ் இங்கே இருக்கட்டும் ---
+# --- மெயின் ரூட் (Dashboard) ---
+@app.route('/')
+@login_required
+def index():
+    return redirect(url_for('dashboard'))
 
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    transactions = Transaction.query.filter_by(user_id=current_user.id).all()
+    return render_template("dashboard.html", transactions=transactions)
+
+# --- Transaction சேர்ப்பதற்கான ரூட் ---
 @app.route('/transaction/add', methods=['GET', 'POST'])
 @login_required
 def add_transaction():
@@ -39,10 +50,8 @@ def add_transaction():
             
             db.session.add(new_trans)
             db.session.commit()
-            flash("Transaction added successfully!", "success")
             return redirect(url_for('dashboard'))
-        except Exception as e:
-            flash(f"Error: {e}", "danger")
+        except Exception:
             return redirect(url_for('dashboard'))
             
     return render_template(
@@ -52,6 +61,12 @@ def add_transaction():
         income_categories=Transaction.INCOME_CATEGORIES,
         expense_categories=Transaction.EXPENSE_CATEGORIES
     )
+
+# --- Login & Logout (இது ரொம்ப முக்கியம்) ---
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    # லாகின் லாஜிக் இங்கே வரும்
+    return render_template("login.html")
 
 if __name__ == '__main__':
     with app.app_context():
