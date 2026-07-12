@@ -7,15 +7,15 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="dashboard-container" style="max-width: 900px; margin: 30px auto; padding: 20px; font-family: sans-serif;">
-        <h2>Welcome to Expense Tracker Dashboard</h2>
-        
-        <div class="actions" style="display: flex; justify-content: space-between; margin-bottom: 20px;">
-            <a href="{{ url_for('add_transaction') }}" class="btn" style="background-color: #3498db; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; font-weight: bold;">Add New Transaction</a>
-            <a href="{{ url_for('logout') }}" class="btn btn-danger" style="background-color: #e74c3c; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; font-weight: bold;">Logout</a>
-        </div>
+<div class="dashboard-container" style="max-width: 900px; margin: 30px auto; padding: 20px; font-family: sans-serif;">
+    <h2>Welcome to Expense Tracker Dashboard</h2>
+    
+    <div class="actions" style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+        <a href="{{ url_for('add_transaction') }}" class="btn" style="background-color: #3498db; color: white; padding: 10px 15px; text-decoration: none; border-radius: 4px;">Add New Transaction</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger" style="background-color: #e74c3c; color: white; padding: 10px 15px; text-decoration: none; border-radius: 4px;">Logout</a>
+    </div>
 
-   <h3>Your Transactions</h3>
+    <h3>Your Transactions</h3>
     <table style="width: 100%; border-collapse: collapse; margin-top: 15px; text-align: left; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
         <thead>
             <tr style="background-color: #2c3e50; color: white;">
@@ -27,15 +27,21 @@
             </tr>
         </thead>
         <tbody style="background-color: white; color: black;">
-            {% for transaction in transactions %}
-            <tr style="border-bottom: 1px solid #ddd;">
-                <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.date }}</td>
-                <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.description }}</td>
-                <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.category }}</td>
-                <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.amount }}</td>
-                <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.type }}</td>
-            </tr>
-            {% endfor %}
+            {% if transactions %}
+                {% for transaction in transactions %}
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.date }}</td>
+                    <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.description }}</td>
+                    <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.category }}</td>
+                    <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.amount }}</td>
+                    <td style="padding: 12px; border: 1px solid #ddd;">{{ transaction.type }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="5" style="padding: 20px; text-align: center; color: #666;">No transactions found.</td>
+                </tr>
+            {% endif %}
         </tbody>
     </table>
 </div>
