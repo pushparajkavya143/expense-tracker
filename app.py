@@ -32,9 +32,10 @@ def index():
 
 @app.route('/dashboard')
 def dashboard():
-    transactions_list = Transaction.query.all()
-    print(f"DEBUG: Data found - {transactions_list}")
-    return render_template("dashboard.html", transactions=transactions_list)
+    transactions_list = Transaction.query.filter_by(user_id=current_user.id).all()
+    
+    
+    return f"<h1>Bro, Enakku Database la {len(transactions_list)} data kadochuruku!</h1>"
 
 @app.route('/transaction/add', methods=['GET', 'POST'])
 def add_transaction():
