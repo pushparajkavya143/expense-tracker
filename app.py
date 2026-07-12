@@ -36,30 +36,33 @@ def dashboard():
     print(f"DEBUG: Transactions count: {len(transactions)}")
     return render_template("dashboard.html", transactions=transactions)
 
-# --- Transaction சேர்ப்பதற்கான ரூட் ---
+
 @app.route('/transaction/add', methods=['GET', 'POST'])
 #@login_required
 def add_transaction():
     if request.method == 'POST':
         try:
             print("Received form data:", request.form)
+            
             t_type = request.form.get("type")
             category = request.form.get("category")
             amount = float(request.form.get("amount"))
             description = request.form.get("description", "").strip()
             date_str = request.form.get("date")
-            t_date = datetime.strptime(date_str,"%Y-%m-%d").date()
-            
+            t_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+
             new_trans = Transaction(user_id=1, type=t_type, category=category, amount=amount, description=description, date=t_date)
             db.session.add(new_trans)
             db.session.commit()
-            print("Transaction saved successfully!")
-            return redirect(url_for('dashboard'))
+            
+            # டேட்டா சேவ் ஆனா இங்க வரும்
+            return "Transaction saved successfully! <a href='/dashboard'>Go to Dashboard</a>"
+            
         except Exception as e:
-            return f"Error occurred: {e}. Data received: {request.form}"
-            
-            
-            
+            # எரர் வந்தா அந்த எரர் என்னனு ஸ்க்ரீன்ல காட்டும்
+            print(f"DEBUG: Error occurred: {e}")
+            return f"Error occurred: {e}"
+
     return render_template(
         "add_edit_transaction.html",
         txn=None,
@@ -67,8 +70,6 @@ def add_transaction():
         income_categories=Transaction.INCOME_CATEGORIES,
         expense_categories=Transaction.EXPENSE_CATEGORIES
     )
-
-
 # --- Login & Logout (இது ரொம்ப முக்கியம்) ---
 @app.route('/login', methods=['GET', 'POST'])
 def login():
